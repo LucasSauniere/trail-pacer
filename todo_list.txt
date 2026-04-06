@@ -1,0 +1,2 @@
+- Add funcionnality VDOT Running index calculator
+- 3h53 sur ITRA pour Pierre mais 3h36 sur Strava ?

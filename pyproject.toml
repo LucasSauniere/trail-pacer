@@ -1,0 +1,40 @@
+[project]
+name = "trail-pacer"
+version = "0.1.0"
+description = "A tool to create pacing plans from GPX files"
+authors = [{name = "Sauniere", email = "lucas.sauniere@ipsa.fr"}]
+dependencies = [
+    "gpxpy>=1.6.2",
+    "overpy>=0.7",
+    "pandas",
+    "matplotlib",
+    "plotly",
+    "folium",
+    "numpy",
+    "requests",
+    "fastapi",
+    "uvicorn",
+    "jupytext",   # to convert .py notebooks to .ipynb
+]
+
+requires-python = ">=3.12"
+
+[project.scripts]
+trail-pacer = "" # need to change path here
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = [""]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
+
+[dependency-groups]
+dev = [
+    "ipykernel>=7.2.0",
+    "pytest>=9.0.2",
+]
