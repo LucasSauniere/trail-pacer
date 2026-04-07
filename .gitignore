@@ -2,7 +2,12 @@
 __pycache__/
 *.py[codz]
 *$py.class
-
+.DS_Store
+src/
+src/*
+pyproject_copy.toml
+.python-version
+notebooks_2/
 # C extensions
 *.so
 

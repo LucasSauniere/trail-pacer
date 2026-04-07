@@ -6,31 +6,32 @@ import xml.etree.ElementTree as ET
 from pathlib import Path
 import gpxpy
 
-def gpx_to_dataframe(gpx_path: Path) -> pd.DataFrame:
-    """Convert every track point into a row with lat, lon, elevation, distance."""
-    with open(gpx_path) as f:
-        gpx = gpxpy.parse(f)
+DATA_PATH = "/Users/sauniere/Desktop/Perso/Codes/Running/trail-pacer/data"
 
-    rows = []
-    prev_pt = None
-    cumulative_m = 0.0
+# def gpx_to_dataframe(gpx_path: Path) -> pd.DataFrame:
+#     """Convert every track point into a row with lat, lon, elevation, distance."""
+#     with open(gpx_path) as f:
+#         gpx = gpxpy.parse(f)
 
-    for track in gpx.tracks:
-        for seg in track.segments:
-            for pt in seg.points:
-                if prev_pt is not None:
-                    dist = pt.distance_3d(prev_pt) or pt.distance_2d(prev_pt) or 0.0
-                    cumulative_m += dist
-                rows.append({
-                    "lat":         pt.latitude,
-                    "lon":         pt.longitude,
-                    "elevation_m": pt.elevation or 0.0,
-                    "distance_m":  cumulative_m,
-                })
-                prev_pt = pt
+#     rows = []
+#     prev_pt = None
+#     cumulative_m = 0.0
 
-    return pd.DataFrame(rows)
+#     for track in gpx.tracks:
+#         for seg in track.segments:
+#             for pt in seg.points:
+#                 if prev_pt is not None:
+#                     dist = pt.distance_3d(prev_pt) or pt.distance_2d(prev_pt) or 0.0
+#                     cumulative_m += dist
+#                 rows.append({
+#                     "lat":         pt.latitude,
+#                     "lon":         pt.longitude,
+#                     "elevation_m": pt.elevation or 0.0,
+#                     "distance_m":  cumulative_m,
+#                 })
+#                 prev_pt = pt
 
+#     return pd.DataFrame(rows)
 
 
 def parse_gpx(filepath: Path) -> pd.DataFrame:
@@ -75,6 +76,47 @@ def parse_gpx(filepath: Path) -> pd.DataFrame:
         f"timestamps: {'✅' if has_ts else '❌  (geometry only — prediction still works)'}"
     )
     return df
+
+
+class Conversions:
+    @staticmethod
+    def pace_min_km_to_kmh(pace_min_km: float) -> float:
+        """Convert pace in min/km to speed in km/h."""
+        return 60.0 / pace_min_km if pace_min_km > 0 else 0.0
+    
+    @staticmethod
+    def kmh_to_pace_min_km(speed_kmh: float) -> float:
+        """Convert speed in km/h to pace in min/km."""
+        return 60.0 / speed_kmh if speed_kmh > 0 else 0.0
+
+    @staticmethod
+    def chrono_to_min(chrono: str) -> float:
+        """Convert a chrono string (e.g. '1:23:45') to total minutes (e.g. 83.75)."""
+        parts = chrono.split(":")
+        if len(parts) == 3:
+            h, m, s = map(float, parts)
+            return h * 60 + m + s / 60
+        elif len(parts) == 2:
+            m, s = map(float, parts)
+            return m + s / 60
+        else:
+            raise ValueError(f"Invalid chrono format: {chrono}")
+        
+    @staticmethod
+    def min_to_chrono(total_min: float) -> str:
+        """Convert total minutes (e.g. 83.75) to a chrono string (e.g. '1:23:45')."""
+        total_sec = int(round(total_min * 60))
+        h = total_sec // 3600
+        m = (total_sec % 3600) // 60
+        s = total_sec % 60
+        if h > 0:
+            return f"{h}:{m:02d}:{s:02d}"
+        return f"{m}:{s:02d}"
+
+    # @staticmethod
+    # def pace
+    # @staticmethod
+
 
 
 def haversine_km(lats: np.ndarray, lons: np.ndarray) -> np.ndarray:

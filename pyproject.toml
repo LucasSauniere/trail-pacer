@@ -6,6 +6,7 @@ authors = [{name = "Sauniere", email = "lucas.sauniere@ipsa.fr"}]
 dependencies = [
     "gpxpy>=1.6.2",
     "overpy>=0.7",
+    "scipy",
     "pandas",
     "matplotlib",
     "plotly",
@@ -20,14 +21,14 @@ dependencies = [
 requires-python = ">=3.12"
 
 [project.scripts]
-trail-pacer = "" # need to change path here
+gpx-pacer = "src.cli.main:main"
 
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
-packages = [""]
+packages = ["src"]
 
 [tool.pytest.ini_options]
 pythonpath = ["."]
@@ -38,3 +39,4 @@ dev = [
     "ipykernel>=7.2.0",
     "pytest>=9.0.2",
 ]
+
