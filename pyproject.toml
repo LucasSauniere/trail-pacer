@@ -28,7 +28,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src"]
+packages = ["trail_pacer"]
 
 [tool.pytest.ini_options]
 pythonpath = ["."]
@@ -39,4 +39,3 @@ dev = [
     "ipykernel>=7.2.0",
     "pytest>=9.0.2",
 ]
-
